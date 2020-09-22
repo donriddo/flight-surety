@@ -1,3 +1,4 @@
+require('dotenv').config();
 /**
  * Use this file to configure your truffle project. It's seeded with some
  * common settings for different networks and features like migrations,
@@ -8,7 +9,7 @@
  *
  * truffleframework.com/docs/advanced/configuration
  *
- * To deploy via Infura you'll need a wallet provider (like truffle-hdwallet-provider)
+ * To deploy via Infura you'll need a wallet provider (like @truffle/hdwallet-provider)
  * to sign your transactions before they're sent to a remote public node. Infura accounts
  * are available for free at: infura.io/register.
  *
@@ -18,11 +19,12 @@
  *
  */
 
-// const HDWallet = require('truffle-hdwallet-provider');
-// const infuraKey = "fj4jll3k.....";
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+const infuraKey = process.env.INFURA_KEY;
 //
-// const fs = require('fs');
-// const mnemonic = fs.readFileSync(".secret").toString().trim();
+const fs = require('fs');
+const mnemonic = fs.readFileSync(".secret").toString().trim();
+console.log({ infuraKey, mnemonic });
 
 module.exports = {
   /**
@@ -47,13 +49,6 @@ module.exports = {
     //  port: 8545,            // Standard Ethereum port (default: none)
     //  network_id: "*",       // Any network (default: none)
     // },
-
-    ganache: {
-      port: 8545,
-      websockets: true,
-      network_id: "*",
-      host: "127.0.0.1"
-    },
 
     // Another network with more advanced options...
     // advanced: {
@@ -82,6 +77,20 @@ module.exports = {
     // network_id: 2111,   // This network is yours, in the cloud.
     // production: true    // Treats this network as if it was a public net. (default: false)
     // }
+    // Useful for deploying to a public network.
+    // NB: It's important to wrap the provider as a function.
+    rinkeby: {
+      provider: new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/v3/${infuraKey}`),
+      network_id: 4,       // rinkeby's id
+      gas: 9900000,        // rinkeby has a lower block limit than mainnet
+      gasPrice: 10000000000
+    },
+    ganache: {
+      port: 8545,
+      websockets: true,
+      network_id: "*",
+      host: "127.0.0.1"
+    },
   },
 
   // Set default mocha options here, use special reporters etc.
