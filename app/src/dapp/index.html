@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Surety DApp</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fff;
+            padding: 2em;
+            font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
+            color: #212121;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+
+        .bold {
+            font-weight: bolder;
+        }
+
+        input {
+            width: 80%;
+            padding: 12px 20px;
+            margin: 10px 0;
+        }
+
+        button {
+            cursor: pointer;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            background-color: #00BCD4;
+            font-size: 16px;
+            padding: 16px 32px;
+            text-decoration: none;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .sell {
+            background-color: white;
+            color: #D1C4E9;
+        }
+
+        .wsc-intro {
+            background-color: #0097A7;
+            color: white;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .form-group {
+            background-color: #0097A7;
+            color: black;
+            width: 80%;
+            padding: 30px;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+        }
+
+        .form-break {
+            background-color: #fff;
+            color: white;
+            width: 100%;
+            padding: 5px;
+        }
+
+        .horizontal-rule {
+            background-color: #BDBDBD;
+        }
+
+        #wsc-chain {
+            grid-area: chain;
+        }
+
+        #meta {
+            grid-area: meta;
+        }
+
+        #main {
+            display: grid;
+            grid-template-columns: 60% 40%;
+            grid-template-rows: auto;
+            grid-template-areas:
+                "chain meta";
+        }
+
+        #walletBalance {
+            position: fixed;
+            right: 10px;
+            top: 0;
+            background-color: #f8f8f8;
+            padding: 20px;
+            padding-top: 0;
+        }
+
+        #currentActor {
+            position: fixed;
+            left: 10px;
+            top: 10px;
+            background-color: #f8f8f8;
+            padding: 20px;
+            display: none;
+        }
+
+        #responsePane {
+            background-color: #f8f8f8;
+            color: #0097A7;
+            width: 90%;
+            padding: 10px;
+            overflow: scroll;
+        }
+
+        #responsePanel {
+            position: fixed;
+            left: 30%;
+            top: 30%;
+            width: 40%;
+            background-color: #0097A7;
+            color: white;
+            padding: 20px;
+            padding-top: 0;
+            display: none;
+        }
+
+        #seeCurrentActorBtn {
+            position: fixed;
+            left: 10px;
+            top: 10px;
+            padding: 20px;
+        }
+
+        #seeWalletBalanceBtn {
+            position: fixed;
+            right: 10px;
+            top: 10px;
+            padding: 20px;
+        }
+
+        #closeCurrentActorBtn,
+        #closeWalletBalanceBtn,
+        #closeResponsePanelBtn {
+            position: absolute;
+            right: 10px;
+            top: 0;
+            height: 20px;
+            width: 40px;
+            background-color: red;
+            color: white;
+            cursor: pointer;
+            border: none;
+            font-size: 10px;
+            padding: 2px;
+            text-decoration: none;
+            margin: 0;
+        }
+
+        #currentActor>.form-group {
+            color: black;
+            width: 80%;
+            padding: 5px;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="responsePanel">
+        <button class="btn-buy" id="closeResponsePanelBtn" type="button" data-id="5">Close</button>
+        <h3>Response</h3>
+        <div id="responsePane"></div>
+    </div>
+    <button class="btn-buy" id="seeCurrentActorBtn" type="button" data-id="5">See Current Actor</button>
+    <div id="currentActor">
+        <button class="btn-buy" id="closeCurrentActorBtn" type="button" data-id="5">Close</button>
+        <h3>Current Actor</h3>
+        <small>All action performed will be from this account</small>
+        <p>Address: <span id="currentActorId"></span></p>
+        <hr>
+        <h4>Set Current Actor</h4>
+        <div class="form-group">
+            Address
+            <br><br>
+            <input type="text" id="setCurrentActor" name="setCurrentActor" value=""><br>
+            <br><br>
+            <button class="btn-buy" id="setCurrentActorBtn" type="button">Set Actor</button>
+        </div>
+    </div>
+    <!-- <button class="btn-buy" id="seeWalletBalanceBtn" type="button" data-id="5">See Wallet Balance</button> -->
+    <div id="walletBalance">
+        <!-- <button class="btn-buy" id="closeWalletBalanceBtn" type="button" data-id="5">Close</button> -->
+        <h3>Wallet Balance</h3>
+        <p>Balance: <span id="currentWalletBalance">0</span></p>
+    </div>
+    <div class="container">
+        <h1 style="text-align: center;">Flight Surety DApp</h1>
+        <hr>
+        <p style="text-align: center;">Insure passengers flight.</p>
+    </div>
+
+    <div id="main">
+        <div id="wsc-chain">
+            <h2>Airline Section</h2>
+            <h4>Register New Airline</h4>
+            <div class="form-group">
+                Name
+                <br>
+                <input type="text" id="regAirlineName" name="regAirlineName"><br>
+                Address
+                <br>
+                <input type="text" id="regAirlineAddress" name="regAirlineAddress" value="" size="50"><br>
+                <button class="btn-buy" id="regAirlineBtn" type="button" data-id="5">Register Airline</button>
+            </div>
+            <div class=form-break></div>
+            <h4>Get Airline Details</h4>
+            <div class="form-group">
+                Address
+                <br>
+                <input type="text" id="getAirlineAddress" name="getAirlineAddress" value="" size="50"><br>
+                <button class="btn-buy" id="getAirlineBtn" type="button" data-id="5">Get Airline</button>
+            </div>
+            <div class=form-break></div>
+            <h4>Approve Airline</h4>
+            <div class="form-group">
+                Address
+                <br>
+                <input type="text" id="approveAirlineAddress" name="approveAirlineAddress" value="" size="50"><br>
+                <button class="btn-buy" id="approveAirlineBtn" type="button" data-id="5">Approve Airline</button>
+            </div>
+            <div class=form-break></div>
+            <h4>Fund</h4>
+            <div class="form-group">
+                <button class="btn-buy" id="fundBtn" type="button" data-id="5">Fund</button>
+            </div>
+            <div class=form-break></div>
+            <h4>Signup as New Airline</h4>
+            <div class="form-group">
+                Name
+                <br>
+                <input type="text" id="signupAirlineName" name="signupAirlineName"><br>
+                <button class="btn-buy" id="signupAirlineBtn" type="button" data-id="5">Signup</button>
+            </div>
+            <div class=form-break></div>
+            <h4>Register Flight</h4>
+            <div class="form-group">
+                Timestamp
+                <br>
+                <input type="datetime-local" id="regFlightTs" name="regFlightTs" value=1><br>
+                <button class="btn-buy" id="regFlightBtn" type="button" data-id="5">Register Flight</button>
+            </div>
+            <div class=form-break></div>
+        </div>
+        <div id="meta">
+            <div id="error-pane"></div>
+            <h2>Passengers Section</h2>
+            <h4>List of Registered Fights</h4>
+            <div style="overflow: scroll;">
+                <ul id="registeredFlightList"></ul>
+            </div>
+            <hr>
+            <h4>Purchase Flight Insurance</h4>
+            <div class="form-group">
+                Flight Key
+                <br>
+                <input type="text" id="purchaseFlightKey" name="purchaseFlightKey"><br>
+                Amount
+                <br>
+                <input type="number" id="purchaseFlightAmount" name="purchaseFlightAmount"><br>
+                <button class="btn-buy" id="purchaseFlightBtn" type="button" data-id="5">Purchase Insurance</button>
+            </div>
+            <div class=form-break></div>
+            <h4>Get Flight Status</h4>
+            <div class="form-group">
+                Flight Key
+                <br>
+                <input type="text" id="getFlightKey" name="getFlightKey"><br>
+                <button class="btn-buy" id="getFlightBtn" type="button" data-id="5">Get Status</button>
+            </div>
+            <div class=form-break></div>
+            <h4>Withdraw Funds</h4>
+            <div class="form-group">
+                <button class="btn-buy" id="withdrawFundsBtn" type="button" data-id="5">Withdraw all Funds</button>
+            </div>
+            <div class=form-break></div>
+        </div>
+    </div>
+
+    <h2>Transaction History<span id="wsc-history"></span></h2>
+    <div>
+        <ul id="wsc-events">
+            <!-- Events will appear here from app.js -->
+        </ul>
+        <br>
+        <hr>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="index.js"></script>
+</body>
+
+</html>
