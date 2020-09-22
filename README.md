@@ -52,7 +52,7 @@ Remix IDE - (Helped in quickly deploying and testing out the sub-contracts and e
 
 Truffle v5.1.34 (core: 5.1.34) - used its webpack box as it contains all the starter code needed and I only just had to jump into implementation right away
 
-Solidity v0.5.16 (solc-js)
+Solidity - ^0.6.0 (solc-js)
 
 Node v10.16.3
 
@@ -62,7 +62,8 @@ Dependencies:
 
 ```json
   {
-    "@truffle/hdwallet-provider": "^1.0.43",
+    "@openzeppelin/contracts": "^3.2.0",
+    "@truffle/hdwallet-provider": "^1.1.0",
     "dotenv": "^8.2.0"
   }
 ```
