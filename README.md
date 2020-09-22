@@ -42,9 +42,13 @@ You can start up ganache with `ganche-cli -a 100 -p 8545` from another terminal 
 
 ### This DApp has been deployed onto the Rinkeby test network. Find details below
 
-Transaction Hash: **0x7e36108674547428d422157e0d7850d8b303e25f9867b3eaf925dab4f7ac5f0d**
+Flight Sure Data Transaction Hash: **0xef5ad0e89f75113e6ba41fe788536a52bb89d10d098ce4cf3cbc08aa7810c7ae**
 
-Contract Address: **0x3841A5d26f46cd49dDCa40B5928e8732C356CA15**
+Flight Sure Data Contract Address: **0xbEc3534749CA21c9b0c28889fD2C427Ccb9FB0FD**
+
+Flight Sure App Transaction Hash: **0xd39b4950eca4ee51f458c96e38082b9a49e76c0f599cf8344360b67895758a31**
+
+Flight Sure App Contract Address: **0xa91775FfbDc061b75115580F75F5c328DEFc87F9**
 
 #### Here are the development tools used
 
