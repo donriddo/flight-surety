@@ -156,7 +156,10 @@ contract FlightSuretyApp {
      *
      */
 
-    function registerAirline(address addr, string memory name) public {
+    function registerAirline(address addr, string memory name)
+        public
+        requireIsOperational
+    {
         uint256 currentAirlineCount = flightSuretyData.airlineCount();
         if (currentAirlineCount >= 4) {
             // can no longer be auto-approved but wait for 50% approval
@@ -235,7 +238,7 @@ contract FlightSuretyApp {
         );
     }
 
-    function signupAsAirline(string memory name) public {
+    function signupAsAirline(string memory name) public requireIsOperational {
         uint256 currentAirlineCount = flightSuretyData.airlineCount();
         require(
             currentAirlineCount >= minimumAirlineCount,
@@ -255,7 +258,7 @@ contract FlightSuretyApp {
      *
      */
 
-    function approveAirline(address addr) public {
+    function approveAirline(address addr) public requireIsOperational {
         flightSuretyData.approveAirline(msg.sender, addr);
     }
 
@@ -264,7 +267,13 @@ contract FlightSuretyApp {
      *
      */
 
-    function fund() public payable paidEnough(10 ether) checkValue(10 ether) {
+    function fund()
+        public
+        payable
+        requireIsOperational
+        paidEnough(10 ether)
+        checkValue(10 ether)
+    {
         flightSuretyData.fund(msg.sender);
         address payable fsdata = _make_payable(address(flightSuretyData));
         fsdata.transfer(10 ether);
@@ -275,7 +284,7 @@ contract FlightSuretyApp {
      *
      */
 
-    function withdrawFunds() public {
+    function withdrawFunds() public requireIsOperational {
         flightSuretyData.pay(msg.sender);
     }
 
@@ -284,7 +293,7 @@ contract FlightSuretyApp {
      *
      */
 
-    function registerFlight(uint256 ts) public {
+    function registerFlight(uint256 ts) public requireIsOperational {
         flightSuretyData.registerFlight(msg.sender, ts);
     }
 
@@ -296,6 +305,7 @@ contract FlightSuretyApp {
     function buyInsurance(bytes32 flightKey)
         public
         payable
+        requireIsOperational
         checkValue(1 ether)
     {
         uint256 amountPaid;
@@ -428,6 +438,7 @@ contract FlightSuretyApp {
     function registerOracle()
         external
         payable
+        requireIsOperational
         paidEnough(REGISTRATION_FEE)
         checkValue(REGISTRATION_FEE)
     {
@@ -461,7 +472,7 @@ contract FlightSuretyApp {
         bytes32 flightKey,
         uint256 timestamp,
         uint8 statusCode
-    ) external {
+    ) external requireIsOperational {
         require(
             (oracles[msg.sender].indexes[0] == index) ||
                 (oracles[msg.sender].indexes[1] == index) ||
@@ -535,7 +546,7 @@ contract FlightSuretyApp {
 
     // endregion
 
-    receive() external payable checkValue(10 ether) {
+    receive() external payable requireIsOperational checkValue(10 ether) {
         flightSuretyData.fund(msg.sender);
         address payable fsdata = _make_payable(address(flightSuretyData));
         fsdata.transfer(10 ether);

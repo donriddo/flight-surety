@@ -213,3 +213,57 @@ it('ensures passenger can purchase flight insurance', async () => {
   assert.equal((new BigNumber(appBal)).isEqualTo(0), true);
   assert.equal((new BigNumber(dataBal)).isEqualTo(totalContractBalance), true);
 });
+
+it('ensures airlines (and only airlines) can turn on/off app operation status and must be via a multiparty consensus', async () => {
+  const appInstance = await FlightSuretyApp.deployed();
+
+  try {
+    await appInstance.setOperatingStatus(false, { from: accounts[7] });
+  } catch (error) {
+    assert.include(error.message, 'Caller is not an airline');
+  }
+
+  let currentOperatingStatus = await appInstance.isOperational.call();
+  assert.equal(currentOperatingStatus, true);
+
+  await appInstance.setOperatingStatus(false, { from: accounts[0] });
+  await appInstance.setOperatingStatus(false, { from: accounts[1] });
+
+  currentOperatingStatus = await appInstance.isOperational.call();
+  // must still be true since minimum operator count is 3
+  assert.equal(currentOperatingStatus, true);
+  try {
+    await appInstance.setOperatingStatus(false, { from: accounts[0] });
+  } catch (error) {
+    assert.include(error.message, 'Caller has already called this function');
+  }
+
+  await appInstance.setOperatingStatus(false, { from: accounts[2] });
+  currentOperatingStatus = await appInstance.isOperational.call();
+  // should now be false
+  assert.equal(currentOperatingStatus, false);
+
+  // must not allow you perform any operation on the app
+  try {
+    await appInstance.registerAirline(accounts[8], 'Lucky Airline', { from: accounts[0] });
+  } catch (error) {
+    assert.include(error.message, 'Contract is currently not operational');
+  }
+
+  try {
+    await appInstance.setOperatingStatus(false, { from: accounts[0] });
+  } catch (error) {
+    assert.include(error.message, 'New mode must be different from existing mode');
+  }
+
+  await appInstance.setOperatingStatus(true, { from: accounts[0] });
+  await appInstance.setOperatingStatus(true, { from: accounts[1] });
+  await appInstance.setOperatingStatus(true, { from: accounts[2] });
+
+  currentOperatingStatus = await appInstance.isOperational.call();
+  // should now be true
+  assert.equal(currentOperatingStatus, true);
+
+  // should now allow you perform operation
+  await appInstance.registerAirline(accounts[8], 'Lucky Airline', { from: accounts[0] });
+});
