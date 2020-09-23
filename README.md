@@ -19,25 +19,23 @@ Airlines pay a default fee of 10 ether before they can use the system. Also afte
 
 2. run `npm install`
 
-3. `cd` into app and again `npm install`
+3. To start the client DApp, `cd` into app, `npm install` and then run  `npm run dev`
 
 4. Run `truffle compile` to compile the contracts
 
 5. Run `truffle test` to ensure all the tests are passing
 
-6. From a separate tab on your terminal and in the project root, run `npm run client` to start up the DApp UI
+6. From another separate tab on your terminal and **in the project folder root**, run `npm run oracle` to start up the oracles server (just a simulation)
 
-7. From another separate tab on your terminal and in the project root, run `npm run oracle` to start up the oracles server (just a simulation)
-
-8. Start up any ethereum node of choice. Preferrably use ganache-cli as it is already configured as part of the DApp and it also allow socket connection for the DApp and the oracles server to hook into. If using ganache, make sure to have ganache installed (https://github.com/trufflesuite/ganache-cli).
+7. Start up any ethereum node of choice. Preferrably use ganache-cli as it is already configured as part of the DApp and it also allow socket connection for the DApp and the oracles server to hook into. If using ganache, make sure to have ganache installed (https://github.com/trufflesuite/ganache-cli).
 
 You can start up ganache with `ganche-cli -a 100 -p 8545` from another terminal tab. This will start up ganache on port 8545 and provide you with free 100 accounts to test with. The rest of the steps below assumes you are running `ganache-cli`
 
-9. Run `truffle migrate --reset --network ganache` to deploy the contract
+8. Run `truffle migrate --reset --network ganache` to deploy the contract
 
-10. Go to `localhost:8081` on your browser to interact with the app.
+9. Go to `localhost:8081` or `localhost:8080` (whichever is displayed in your terminal) on your browser to interact with the app.
 
-11. Enjoy!
+10. Enjoy!
 
 
 ### This DApp has been deployed onto the Rinkeby test network. Find details below
